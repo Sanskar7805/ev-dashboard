@@ -1,0 +1,42 @@
+service: ev-dashboard-api
+frameworkVersion: '2'
+
+provider:
+  name: aws
+  runtime: nodejs12.x
+  lambdaHashingVersion: 20201221
+  apiGateway:
+    shouldStartNameWithService: true
+  timeout: 20
+
+  stage: v1
+  region: eu-west-2
+
+  httpApi:
+    cors: true
+
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - dynamodb:Query
+        - dynamodb:PutItem
+      Resource: "arn:aws:dynamodb:eu-west-2:690524749915:table/vehicles"
+
+functions:
+  exchange:
+    handler: handler.exchange
+    environment:
+      SMARTCAR_CLIENT_ID: ea125c5b-bda1-41a6-a33f-e1c0c9c33779
+      SMARTCAR_CLIENT_SECRET: ${ssm:/ev-dashboard-secret-key~true}
+      SMARTCAR_REDIRECT_URI: https://javascript-sdk.smartcar.com/v2/redirect?app_origin=https://d17f0ehhxwd38n.cloudfront.net
+      # SMARTCAR_REDIRECT_URI: https://javascript-sdk.smartcar.com/v2/redirect?app_origin=http://localhost:3000
+    events:
+      - httpApi:
+          path: /exchange
+          method: get
+  vehicle:
+    handler: handler.vehicle
+    events:
+      - httpApi:
+          path: /vehicle
+          method: get

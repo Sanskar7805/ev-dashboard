@@ -1,0 +1,26 @@
+{
+  "name": "ev-dashboard-widget",
+  "version": "1.0.0",
+  "description": "View your electric car location, charge and range levels in your OSX system tray",
+  "author": "",
+  "main": "src/index.js",
+  "scripts": {
+    "start": "electron .",
+    "dist": "electron-builder"
+  },
+  "license": "ISC",
+  "devDependencies": {
+    "electron": "^11.2.3",
+    "electron-builder": "^22.9.1"
+  },
+  "build": {
+    "productName": "EV Dashboard",
+    "appId": "com.edkelly.evdashboard",
+    "extraResources": [
+      "./assets/**"
+    ],
+    "mac": {
+      "icon": "assets/app-icon.png"
+    }
+  }
+}
